@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+package shared.v1;
+
+import "google/protobuf/timestamp.proto";
+
+
+enum Direction {
+  DIR_UNKNOWN = 0;
+  FWD = 1;
+  REV = 2;
+}
+
+enum AckStatus {
+  ACK_UNKNOWN = 0;
+  OK = 1;
+  ERR = 2;
+}
+
+enum ModeChangeReason {
+  REASON_UNKNOWN = 0;
+  USER_REQUEST = 1;
+  SYSTEM_FAULT = 2;
+  SCHEDULED = 3;
+  REMOTE = 4;
+}
+
+message Location {
+  double x = 1;
+  double y = 2;
+}
+
+message CarStatus {
+  string car_id = 1;
+  shared.v1.Location location = 2;
+  int32 battery = 3;
+  bool available = 4;
+  bool passenger = 5;
+  google.protobuf.Timestamp timestamp = 6;
+}
+
+message Ack {
+  string car_id = 1;
+  AckStatus status = 3;        
+  string message = 4;          // Optional
+}

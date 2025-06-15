@@ -1,0 +1,57 @@
+syntax = "proto3";
+
+package city.v1;
+
+import "protocols/v1/shared.proto";
+
+// === Request/Response Messages ===
+
+// Request to assign a route to a car
+message RouteCommandRequest {
+  string car_id = 1;
+  repeated Waypoint waypoints = 2;
+}
+
+// Request to toggle a car's service status
+message ToggleServiceRequest {
+  string car_id = 1;
+  bool enabled = 2;
+}
+
+// Request to book a ride
+message RideRequest {
+  shared.v1.Location pickup = 1;
+  shared.v1.Location dropoff = 2;
+  string passenger_name = 3;
+}
+
+// Request to get telemetry data for a car
+message TelemetryRequest {
+  string car_id = 1;
+}
+
+// Request to update business hours
+message UpdateBusinessHoursRequest {
+  string service_id = 1;
+  BusinessHours hours = 2;
+}
+
+// === Data Structures ===
+
+// A waypoint for routing
+message Waypoint {
+  double lat = 1;
+  double lon = 2;
+}
+
+message TimeOfDay {
+  int32 hours = 1;   // 0-23
+  int32 minutes = 2; // 0-59
+  int32 seconds = 3; // 0-59
+}
+
+// Business hours for the service
+message BusinessHours {
+  TimeOfDay open_time = 2;
+  TimeOfDay close_time = 3;
+}

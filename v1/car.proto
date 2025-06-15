@@ -1,0 +1,78 @@
+syntax = "proto3";
+
+package car.v1;
+
+import "protocols/v1/shared.proto";
+import "google/protobuf/timestamp.proto";
+
+// === Request/Response Messages ===
+
+// General request wrapper
+message Request {
+  string request_id = 1;
+  string sender_id = 2;
+  google.protobuf.Timestamp timestamp = 3;
+  oneof payload {
+    DriveCommand drive_command = 4;
+    ModeCommand mode_command = 5;
+    PingCommand ping_command = 6;
+  }
+}
+
+message GetStatusRequest {
+  string car_id = 1;
+}
+
+// General response wrapper
+message Response {
+  string request_id = 1;
+  string receiver_id = 2;
+  google.protobuf.Timestamp timestamp = 3;
+  oneof payload {
+    shared.v1.Ack ack = 4;
+    shared.v1.CarStatus car_status = 5;
+  }
+}
+
+// === Data Structures and Enums ===
+
+enum Mode {
+  UNKNOWN = 0;
+  DRIVE = 1;
+  STOP = 2;
+  BRAKE = 3;
+  PARK = 4;
+  CHARGE = 5;
+  EMERGENCY = 6;
+  DIAGNOSTIC = 7;
+}
+
+enum Status {
+  STATUS_UNKNOWN = 0;
+  IDLE = 1;
+  ENROUTE = 2;
+  CHARGING = 3;
+  MAINTENANCE = 4;
+}
+
+// Ping for heartbeat or presence
+message PingCommand {
+  string car_id = 1;
+  google.protobuf.Timestamp timestamp = 2;
+}
+
+// Request to drive the car
+message DriveCommand {
+  int32 left_speed = 1;
+  shared.v1.Direction left_direction = 2;
+  int32 right_speed = 3;
+  shared.v1.Direction right_direction = 4;
+  int32 steering_angle = 5; // -45 to 45
+  google.protobuf.Timestamp timestamp = 6;
+}
+
+// Request to change the car's mode
+message ModeCommand {
+  Mode mode = 1;
+  shared.v1.ModeChangeReason reason = 2;
+}
