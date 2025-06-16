@@ -36,6 +36,12 @@ message Response {
 
 // === Data Structures and Enums ===
 
+enum Direction {
+  DIR_UNKNOWN = 0;
+  FWD = 1;
+  REV = 2;
+}
+
 enum Mode {
   UNKNOWN = 0;
   DRIVE = 1;
@@ -64,9 +70,9 @@ message PingCommand {
 // Request to drive the car
 message DriveCommand {
   int32 left_speed = 1;
-  shared.v1.Direction left_direction = 2;
+  Direction left_direction = 2;
   int32 right_speed = 3;
-  shared.v1.Direction right_direction = 4;
+  Direction right_direction = 4;
   int32 steering_angle = 5; // -45 to 45
   google.protobuf.Timestamp timestamp = 6;
 }
